@@ -24,10 +24,15 @@ export default createStore({
     deleteTodo(state, id) {
       state.todos = state.todos.filter(todo=> todo.id != id)
     },
-    updateTodo(state, todos) {
-      const {id, title} = todos
+    updateTodo(state, newtodos) {
+      const {id} = newtodos
       const index = state.todos.findIndex(todo => todo.id === id)
-      state.todos[index].title = title
+      const todo = state.todos[index]
+      for(const key in todo){
+        if(newtodos[key]!==undefined) {
+          todo[key] = newtodos[key]
+        }
+      }
     },
     clearTodo(state) {
       state.todos = []
@@ -39,14 +44,9 @@ export default createStore({
         url :EDN_POINT,
         method: 'GET',
         headers,
-          //목록 조회의 경우 body부분이 필요가 없습니다.
       })   
-      console.log(res.data)
-      //받아온 자료를 갱신해줘야합니다.
       commit('setTodos', res.data)
     },
-    //todoitem을 생성
-    //payload=title로 이름 설정
     async createTodo({commit}, {title}) {
      const res = await axios({
         url :EDN_POINT,
@@ -68,7 +68,7 @@ export default createStore({
         commit('deleteTodo', id)
     },
     async updateTodo({commit}, data) {
-     const {id, done, title} = data
+     const {id, done, title, order} = data
      const res = await axios({
       url:`${EDN_POINT}/${id}`,
       method: 'PUT',
@@ -76,11 +76,11 @@ export default createStore({
       data: {
         title,
         id,
-        done
+        done,
+        order
       }
     })
       commit('updateTodo', res.data)
     },
-
   }
 })

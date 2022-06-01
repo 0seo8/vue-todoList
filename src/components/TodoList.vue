@@ -1,4 +1,7 @@
 <template>
+  <div class="todo-count">
+    You've got <span class="string">{{ todoTotal }}</span> tasks
+  </div>
   <ul>
     <TodoItem
       v-for="todo in todos"
@@ -19,13 +22,17 @@ export default {
   },
   data() {
     return {
-      total:''
+      total: '',
+      order: ''
     }
   },
   //store에 있는 데이터는 computed에서 가져올 수 있습니다.
   computed: {
     todos() {
       return this.$store.state.todos
+    },
+    todoTotal() {
+      return this.$store.state.todos.filter(todo => todo.done === false).length
     }
   },
   created() {
@@ -45,6 +52,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    .todo-count {
+      letter-spacing: .1px;
+      position: relative;
+      width: 80vw;
+      margin: 0 auto 1.5rem;
+      text-align: center;
+      .string {
+        font-size: 1.8rem;
+        padding: .4rem;
+        font-weight: bold;
+      }
+    }
     ul  {
       box-sizing: border-box;
       position: relative;

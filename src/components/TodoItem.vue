@@ -2,12 +2,12 @@
   <div class="wrap">
     <input
       type="checkbox" 
-      :checked="todo.done===true"
+      :checked="todo.done"
       @click="isChecked" />
     <template v-if="!editMode">
       <div class="text">
         <span>{{ todo.title }}</span>
-        <span>{{ updaedDate }}</span>
+        <!-- <span>{{ updatedDate }}</span> -->
       </div>
       <button
         class="edit"
@@ -44,19 +44,18 @@ export default {
   props: {
     todo: {
       type: Object,
-      required: true
+      required: true,
     }
   },
   data() {
     return {
       editMode: false,
-      date: this.todo.updatedAt
     }
   },
   computed: {
     todos() {
       return this.$store.state.todos
-    }
+    },
   },
   methods: {
     async deleteTodo(id) {
@@ -76,15 +75,16 @@ export default {
     updateTodo() {
       const data = {id:this.todo.id,
                     done: this.todo.done,
-                    title:this.title}
+                    title:this.title,
+                    order: this.todo.order}
       this.$store.dispatch('updateTodo',  data)
     },
-    isChecked() {
-      const isChecked = !this.todo.done
-      const data = {id:this.todo.id,
-                    done: isChecked,
-                    title:this.todo.title}
-      this.$store.dispatch('updateTodo',  data)
+    isChecked(evnet) {
+    const data = {id:this.todo.id,
+                  done: evnet.target.checked,
+                  title:this.todo.title,
+                  order: this.todo.order }
+    this.$store.dispatch('updateTodo',  data)
     }
   }
 }
