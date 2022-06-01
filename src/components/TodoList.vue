@@ -2,6 +2,7 @@
   <div class="todo-count">
     You've got <span class="string">{{ todoTotal }}</span> tasks
   </div>
+  <IsLoading v-if="isLoading" />
   <ul>
     <TodoItem
       v-for="todo in todos"
@@ -12,11 +13,13 @@
 </template>
 
 <script>
+import IsLoading from '~/components/IsLoading.vue'
 import TodoItem from '~/components/TodoItem.vue'
 import Pagination from '~/components/Pagination.vue'
 
 export default {
   components : {
+    IsLoading,
     TodoItem,
     Pagination
   },
@@ -33,6 +36,9 @@ export default {
     },
     todoTotal() {
       return this.$store.state.todos.filter(todo => todo.done === false).length
+    },
+    isLoading() {
+      return this.$store.state.isLoaing
     }
   },
   created() {
