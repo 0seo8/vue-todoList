@@ -6,7 +6,9 @@
       @click="isChecked" />
     <template v-if="!editMode">
       <div class="text">
-        <span>{{ todo.title }}</span>
+        <span
+          class="todo-text"
+          :class="{completed: todo.done}">{{ todo.title }}</span>
         <!-- <span>{{ updatedDate }}</span> -->
       </div>
       <button
@@ -108,6 +110,12 @@ export default {
       flex-grow: 1;
       text-align: start;
       color: rgb(84, 82, 82);
+    }
+    .todo-text {
+      &.completed {
+          color: #ccc;
+          text-decoration: line-through;
+      }
     }
     .editInput {
       margin-right: 1rem;
