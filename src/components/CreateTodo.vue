@@ -28,9 +28,8 @@ export default {
       if(!this.title.trim()) return  
       const value = {
         title: this.title,
+        order: this.$store.state.order +1 
       }
-      // plugin? store? 
-      //기능이긴 하지만 결국 이 기능을 통해 todolist를 관리하는 것이기 때문에 기능만 취급하는 plugin보다는 store가 더 적합
       this.$store.dispatch('createTodo', value)
       this.title =''
     }

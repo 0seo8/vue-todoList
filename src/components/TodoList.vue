@@ -26,7 +26,6 @@ export default {
   data() {
     return {
       total: '',
-      order: ''
     }
   },
   //store에 있는 데이터는 computed에서 가져올 수 있습니다.
@@ -39,7 +38,7 @@ export default {
     },
     isLoading() {
       return this.$store.state.isLoaing
-    }
+    }    
   },
   created() {
     this.readTodos()
@@ -51,7 +50,6 @@ export default {
     async readTodos() {
       // action은 dispatch라는 메소드로 실행할 수 있습니다.
       this.$store.dispatch('readTodos')
-      console.log('this.todos', this.todos)
     }
   }
 }

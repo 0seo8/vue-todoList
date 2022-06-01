@@ -12,7 +12,8 @@ export default createStore({
   state() {
     return {
       isLoaing:false,
-      todos:[]
+      todos:[],
+      order: 0
     }
   },
   mutations : {
@@ -21,6 +22,8 @@ export default createStore({
     },
     setTodos(state, todos) {
       state.todos = todos
+      state.order = Math.max(...todos.map(todo => todo.order))
+      console.log(state.order)
     },
     addTodo(state, todo) {
       state.todos.push(todo)
@@ -51,6 +54,7 @@ export default createStore({
           method: 'GET',
           headers,
         })   
+        console.log(res.data)
         commit('setTodos', res.data)
       } catch (err) {
         console.err(err)
@@ -58,7 +62,7 @@ export default createStore({
         commit('changeLoaingStatus', false)
       }
     },
-    async createTodo({commit}, {title}) {
+    async createTodo({commit}, {title, order}) {
       try {
         commit('changeLoaingStatus')
         const res = await axios({
@@ -67,6 +71,7 @@ export default createStore({
           headers,
             data: {
               title,
+              order
             }
         })
         commit('addTodo', res.data)
