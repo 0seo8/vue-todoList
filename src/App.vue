@@ -1,13 +1,17 @@
 <template>
+  <TheHeader />
   <CreateTodo />
   <TodoList />
 </template>
 
 <script>
+import TheHeader from '~/components/TheHeader.vue'
 import CreateTodo from '~/components/CreateTodo.vue'
 import TodoList from '~/components/TodoList.vue'
+
 export default {
   components : {
+    TheHeader,
     CreateTodo,
     TodoList,
   }
@@ -15,12 +19,5 @@ export default {
 </script>
 
 <style lang="scss">
-  button {
-      outline: 0;
-      border: none;
-      border-radius: 5px;
-      padding: 5px;
-      margin-left: 10px;
-      cursor: pointer;
-  }
+  @import url('./assets/style/reset.scss')
 </style>

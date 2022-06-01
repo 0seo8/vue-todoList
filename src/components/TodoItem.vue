@@ -5,28 +5,33 @@
       :checked="todo.done===true"
       @click="isChecked" />
     <template v-if="!editMode">
-      <span>{{ todo.title }}</span>
+      <div class="text">
+        <span>{{ todo.title }}</span>
+        <span>{{ updaedDate }}</span>
+      </div>
       <button
         class="edit"
         @click.stop="onEditMode">
-        수정
+        Edit
       </button>
       <button 
         class="delete"
         @click="deleteTodo(todo.id)">
-        삭제
+        Delete
       </button>
     </template>
     <template v-else>
       <div @click.stop>
         <input
           ref="titleInput"
+          class="editInput"
           :value="title"
           @input="title=$event.target.value" 
           @keyup.enter="offEditMode(); updateTodo()" 
           @keydown.esc="offEditMode" />
       </div>
       <button
+        class="button_confirm"
         @click="offEditMode(); updateTodo()">
         확인
       </button>
@@ -45,6 +50,7 @@ export default {
   data() {
     return {
       editMode: false,
+      date: this.todo.updatedAt
     }
   },
   computed: {
@@ -86,10 +92,37 @@ export default {
 
 <style lang="scss" scoped>
   .wrap {
+    position: relative;
     display: flex;
     align-items: center;
+    padding: .5rem;
+    border-bottom: 1px solid #ccc;
+    input[type="checkbox"] {
+      transform: scale(1.3);
+      margin-right: 1rem;
+      cursor: pointer;
+    }
+    .text,
+    .editInput {
+      padding: 1rem;
+      flex-grow: 1;
+      text-align: start;
+      color: rgb(84, 82, 82);
+    }
+    .editInput {
+      margin-right: 1rem;
+      padding: .8rem 1rem;
+      border-radius: 1rem;
+    }
     button {
-      margin-left: 10px;
+      padding: .5rem;
+      cursor: pointer;
+      letter-spacing: .1rem;
+      font-size: 1.3rem;
+      color: rgb(166, 166, 166);
+      background-color: aliceblue;
+      border-radius: 1rem;
+      margin-right: 1rem;
     }
   }
 </style>
