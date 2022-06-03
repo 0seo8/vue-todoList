@@ -82,12 +82,12 @@ export default {
       this.$store.dispatch('updateTodo',  data)
     },
     isChecked(evnet) {
-    const data = {id:this.todo.id,
+      const data = {id:this.todo.id,
                   done: evnet.target.checked,
                   title:this.todo.title,
                   order: this.todo.order }
-    this.$store.dispatch('updateTodo',  data)
-    }
+      this.$store.dispatch('updateTodo',  data)
+    },
   }
 }
 </script>
@@ -99,6 +99,9 @@ export default {
     align-items: center;
     padding: .5rem;
     border-bottom: 1px solid #ccc;
+    &:hover {
+      background-color: rgba(0,0,0,.1);
+    }
     input[type="checkbox"] {
       transform: scale(1.3);
       margin-right: 1rem;

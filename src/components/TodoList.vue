@@ -3,29 +3,35 @@
     You've got <span class="string">{{ todoTotal }}</span> tasks
   </div>
   <IsLoading v-if="isLoading" />
-  <ul>
+  <ul ref="todoList">
+    <p v-if="todoTotal<1">
+      아직 등록된 일정이 없습니다.
+    </p>
     <TodoItem
       v-for="todo in todos"
-      :key="todo.id" 
+      :key="todo.id"
+      class="handle" 
       :todo="todo" />
   </ul>
-  <Pagination />
+  <ClearBtn />
 </template>
 
 <script>
+import Sortable from 'sortablejs'
 import IsLoading from '~/components/IsLoading.vue'
 import TodoItem from '~/components/TodoItem.vue'
-import Pagination from '~/components/Pagination.vue'
+import ClearBtn from '~/components/ClearBtn.vue'
 
 export default {
   components : {
     IsLoading,
     TodoItem,
-    Pagination
+    ClearBtn
   },
   data() {
     return {
       total: '',
+      drag: false
     }
   },
   //store에 있는 데이터는 computed에서 가져올 수 있습니다.
@@ -38,20 +44,32 @@ export default {
     },
     isLoading() {
       return this.$store.state.isLoaing
-    }    
+    },    
   },
+
   created() {
     this.readTodos()
   },
-  updated() {
-    // this.readTodos()
+  mounted() {
+    this.initSortable()
   },
   methods: {
     async readTodos() {
       // action은 dispatch라는 메소드로 실행할 수 있습니다.
       this.$store.dispatch('readTodos')
+    },
+    initSortable() {
+      new Sortable(this.$refs.todoList, {
+        handle: '.handle', 
+        delay: 50, 
+        animation: 0, 
+        forceFallback: true, 
+        onEnd: event => {
+          console.log(event)
+        }
+      })
     }
-  }
+  },
 }
 </script>
 

@@ -41,9 +41,6 @@ export default createStore({
         }
       }
     },
-    clearTodo(state) {
-      state.todos = []
-    }
   },
   actions: {
     async readTodos({commit}) {
@@ -76,7 +73,7 @@ export default createStore({
         })
         commit('addTodo', res.data)
       } catch(err) {
-        console.err(err)
+        console.error(err)
       } finally {
         commit('changeLoaingStatus', false)
       }
@@ -84,7 +81,7 @@ export default createStore({
 
     async deleteTodo({commit}, id) {
       try {
-        commit('changeLoaingStatus')
+        // commit('changeLoaingStatus')
         await axios({
           url:`${EDN_POINT}/${id}`,
           method: 'DELETE',
@@ -92,9 +89,9 @@ export default createStore({
         })
           commit('deleteTodo', id)
       } catch(err) {
-        console.err(err)
+        console.error(err)
       } finally {
-        commit('changeLoaingStatus', false)
+        // commit('changeLoaingStatus', false)
       }
     },
     async updateTodo({commit}, data) {
@@ -114,7 +111,7 @@ export default createStore({
         })
           commit('updateTodo', res.data)
       } catch(err) {
-        console.err(err)
+        console.error(err)
       } finally {
         commit('changeLoaingStatus', false)
       }

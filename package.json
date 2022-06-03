@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "sortablejs": "^1.15.0",
     "vue": "^3.2.25",
+    "vuedraggable": "^4.1.0",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
