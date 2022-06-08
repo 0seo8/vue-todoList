@@ -1,5 +1,16 @@
 <template>
   <div class="todo-count">
+    <select v-model="showMode">
+      <option value="all">
+        All
+      </option>
+      <option value="active">
+        Active
+      </option>
+      <option value="done">
+        Completed
+      </option>
+    </select>
     You've got <span class="string">{{ todoTotal }}</span> tasks
   </div>
   <IsLoading v-if="isLoading" />
@@ -13,38 +24,50 @@
       class="handle" 
       :todo="todo" />
   </ul>
-  <ClearBtn />
+  <TodoButtonList />
 </template>
 
 <script>
 import Sortable from 'sortablejs'
 import IsLoading from '~/components/IsLoading.vue'
 import TodoItem from '~/components/TodoItem.vue'
-import ClearBtn from '~/components/ClearBtn.vue'
+import TodoButtonList from '~/components/TodoButtonList.vue'
 
 export default {
   components : {
     IsLoading,
     TodoItem,
-    ClearBtn
+    TodoButtonList
   },
   data() {
     return {
       total: '',
-      drag: false
+      drag: false,
+      showMode: 'all'
     }
   },
-  //store에 있는 데이터는 computed에서 가져올 수 있습니다.
   computed: {
     todos() {
-      return this.$store.state.todos
+      if(this.showMode === 'all') {
+        return this.$store.state.todos
+      } else if(this.showMode === 'active') {
+        return this.$store.state.todos.filter(todo=>todo.done === false)
+      } else {
+        return this.$store.state.todos.filter(todo=>todo.done === true)
+      }
     },
     todoTotal() {
       return this.$store.state.todos.filter(todo => todo.done === false).length
     },
     isLoading() {
       return this.$store.state.isLoaing
-    },    
+    },  
+    completed() {
+      return console.log(this.$store.state.todos.filter(todo => todo.done === true))
+    },
+    active() {
+      return this.$store.state.todos.filter(todo => todo.done === false)
+    }  
   },
 
   created() {
@@ -74,6 +97,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
     .todo-count {
       letter-spacing: .1px;
       position: relative;
@@ -85,11 +109,16 @@ export default {
         padding: .4rem;
         font-weight: bold;
       }
+      select {
+        position: absolute;
+        left: 0;
+      }
     }
     ul  {
       box-sizing: border-box;
       position: relative;
       width: 80vw;
+      height: 60vh;
       margin-right: auto;
       margin-left: auto;
       text-align: center;

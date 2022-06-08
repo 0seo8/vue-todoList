@@ -47,7 +47,7 @@ export default {
     todo: {
       type: Object,
       required: true,
-    }
+    },
   },
   data() {
     return {

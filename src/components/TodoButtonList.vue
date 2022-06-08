@@ -2,8 +2,8 @@
   <div class="wrap">
     <button
       class="clear"
-      @click="clearTodo">
-      Clear All
+      @click="clearAllTodo">
+      Completed Clear
     </button>
   </div>
 </template>
@@ -11,9 +11,10 @@
 <script>
 export default {
   methods: {
-    clearTodo() {
+    clearAllTodo() {
       this.$store.commit('changeLoaingStatus')
-      const data= this.$store.state.todos.map(todo => todo.id)
+      const completedTodo = this.$store.state.todos.filter(todo=>todo.done===true)
+      const data= completedTodo.map(todo => todo.id)
       try {
         data.forEach(id => this.$store.dispatch('deleteTodo', id))
       } catch(err) {
@@ -35,7 +36,6 @@ export default {
     margin-right: auto;
     button {
       position: absolute;
-      right: 0;
       padding: .5rem;
       cursor: pointer;
       letter-spacing: .1rem;
@@ -44,6 +44,7 @@ export default {
       background-color: rgb(227, 233, 238);
       border-radius: 1rem;
       margin-right: 1rem;
+      right: 0;
     }
   }
 </style>

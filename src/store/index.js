@@ -13,7 +13,7 @@ export default createStore({
     return {
       isLoaing:false,
       todos:[],
-      order: 0
+      order: ''
     }
   },
   mutations : {
@@ -23,10 +23,11 @@ export default createStore({
     setTodos(state, todos) {
       state.todos = todos
       state.order = Math.max(...todos.map(todo => todo.order))
-      console.log(state.order)
+      console.log('order',state.order)
     },
-    addTodo(state, todo) {
+    createTodo(state, todo) {
       state.todos.push(todo)
+      state.order = todo.order
     },
     deleteTodo(state, id) {
       state.todos = state.todos.filter(todo=> todo.id != id)
@@ -71,7 +72,8 @@ export default createStore({
               order
             }
         })
-        commit('addTodo', res.data)
+        console.log(res.data)
+        commit('createTodo', res.data)
       } catch(err) {
         console.error(err)
       } finally {
@@ -81,7 +83,7 @@ export default createStore({
 
     async deleteTodo({commit}, id) {
       try {
-        // commit('changeLoaingStatus')
+        commit('changeLoaingStatus')
         await axios({
           url:`${EDN_POINT}/${id}`,
           method: 'DELETE',
@@ -91,7 +93,7 @@ export default createStore({
       } catch(err) {
         console.error(err)
       } finally {
-        // commit('changeLoaingStatus', false)
+        commit('changeLoaingStatus', false)
       }
     },
     async updateTodo({commit}, data) {
@@ -115,6 +117,6 @@ export default createStore({
       } finally {
         commit('changeLoaingStatus', false)
       }
-    },
+    }
   }
 })
