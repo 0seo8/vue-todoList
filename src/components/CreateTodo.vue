@@ -1,16 +1,14 @@
 <template>
-  <div class="wrap">
-    <h2>You must do it!</h2>
-    <div class="inputbox">
-      <input
-        placeholder="Please write an actionable plan..👀"
-        :value="title"
-        @input="title=$event.target.value"
-        @keyup.enter="createTodo" />
-      <button @click="createTodo">
-        plus
-      </button>
-    </div>
+  <h2>You must do it!</h2>
+  <div class="inputbox">
+    <input
+      placeholder="Please write an actionable plan..👀"
+      :value="title"
+      @input="title=$event.target.value"
+      @keyup.enter="createTodo" />
+    <button @click="createTodo">
+      plus
+    </button>
   </div>
 </template>
 
@@ -26,11 +24,11 @@ export default {
   methods: {
     async createTodo() {
       if(!this.title.trim()) return  
-      const value = {
+      const data = {
         title: this.title,
         order: this.$store.state.order +1 
       }
-      this.$store.dispatch('createTodo', value)
+      this.$store.dispatch('createTodo', data)
       this.title =''
     }
   }
@@ -38,15 +36,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .wrap {
-    position: relative;
-    width: 80vw;
-    margin-right: auto;
-    margin-left: auto;
-    text-align: center;
     h2 {
+      text-align: center;
+      color: rgba(0,0,0,.8);
       padding: 1rem;
       font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
     }
     .inputbox {
       position: relative;
@@ -55,15 +51,14 @@ export default {
         border-radius: 1.2rem;
         padding: .8rem 1rem;
         width: calc(100% - 2.5rem);
-        max-width: 80w;
       }
       button {
         position: absolute;
-        right: 2.5rem;
-        top: .8rem;
+        background-color: inherit;
+        right: 0;
+        top: .6rem;
         color: rgb(177, 173, 173);
         cursor: pointer;
       }
     }
-  }
 </style>

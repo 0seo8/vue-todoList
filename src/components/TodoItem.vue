@@ -1,23 +1,24 @@
 <template>
-  <div class="wrap">
+  <li
+    class="handle"
+    :name="todo.updatedAt.slice(5,10)">
     <input
       type="checkbox" 
       :checked="todo.done"
       @click="isChecked" />
     <template v-if="!editMode">
-      <div class="text">
-        <span
-          class="todo-text"
-          :class="{completed: todo.done}">{{ todo.title }}</span>
-        <!-- <span>{{ updatedDate }}</span> -->
-      </div>
+      <span
+        class="text "
+        :class="{completed: todo.done}">{{ todo.title }}</span>
       <button
         class="edit"
+        :disabled="todo.done"
         @click.stop="onEditMode">
         Edit
       </button>
       <button 
         class="delete"
+        :disabled="todo.done"
         @click="deleteTodo(todo.id)">
         Delete
       </button>
@@ -38,7 +39,7 @@
         확인
       </button>
     </template>
-  </div>
+  </li>
 </template>
 
 <script>
@@ -93,20 +94,45 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .wrap {
+  .handle {
     position: relative;
     display: flex;
     align-items: center;
     padding: .5rem;
     border-bottom: 1px solid #ccc;
+
+    &[name]:hover::after {
+      content: "updated : " attr(name);
+      position: absolute;
+      top: 60%;
+      left: 10%;
+      padding: 5px; 
+      font-size:1.2rem; 
+      color:rgba(0,0,0,.7);
+      text-align:center; 
+      z-index:100;
+    }
+
     &:hover {
       background-color: rgba(0,0,0,.1);
+      button {
+        opacity: 1;
+        &:disabled.edit {
+          opacity: 0;
+        }
+      }
     }
+
+    button {
+      opacity: 0;
+    }
+
     input[type="checkbox"] {
       transform: scale(1.3);
       margin-right: 1rem;
       cursor: pointer;
     }
+
     .text,
     .editInput {
       padding: 1rem;
@@ -114,26 +140,21 @@ export default {
       text-align: start;
       color: rgb(84, 82, 82);
     }
-    .todo-text {
+
+    .text {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
       &.completed {
           color: #ccc;
           text-decoration: line-through;
       }
     }
+
     .editInput {
       margin-right: 1rem;
       padding: .8rem 1rem;
       border-radius: 1rem;
-    }
-    button {
-      padding: .5rem;
-      cursor: pointer;
-      letter-spacing: .1rem;
-      font-size: 1.3rem;
-      color: rgb(166, 166, 166);
-      background-color: aliceblue;
-      border-radius: 1rem;
-      margin-right: 1rem;
     }
   }
 </style>

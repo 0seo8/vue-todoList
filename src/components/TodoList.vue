@@ -1,49 +1,41 @@
 <template>
   <div class="todo-count">
-    <select v-model="showMode">
-      <option value="all">
-        All
-      </option>
-      <option value="active">
-        Active
-      </option>
-      <option value="done">
-        Completed
-      </option>
-    </select>
-    You've got <span class="string">{{ todoTotal }}</span> tasks
+    <TodoSelect
+      :show-mode="showMode"
+      @update-selected="udtateSelected($event)" />
+    <p>You've got <span class="string">{{ todoTotal }}</span> tasks</p>
+    <TodoButtonList v-if="showMode==='done'" />
   </div>
   <IsLoading v-if="isLoading" />
   <ul ref="todoList">
-    <p v-if="todoTotal<1">
+    <p v-if="!todoTotal">
       아직 등록된 일정이 없습니다.
     </p>
     <TodoItem
       v-for="todo in todos"
       :key="todo.id"
-      class="handle" 
       :todo="todo" />
   </ul>
-  <TodoButtonList />
 </template>
 
 <script>
 import Sortable from 'sortablejs'
+import TodoSelect from '~/components/TodoSelect.vue'
 import IsLoading from '~/components/IsLoading.vue'
 import TodoItem from '~/components/TodoItem.vue'
 import TodoButtonList from '~/components/TodoButtonList.vue'
 
 export default {
   components : {
+    TodoSelect,
     IsLoading,
     TodoItem,
-    TodoButtonList
+    TodoButtonList,
   },
   data() {
     return {
       total: '',
-      drag: false,
-      showMode: 'all'
+      showMode: 'all',
     }
   },
   computed: {
@@ -62,58 +54,62 @@ export default {
     isLoading() {
       return this.$store.state.isLoaing
     },  
-    completed() {
-      return console.log(this.$store.state.todos.filter(todo => todo.done === true))
-    },
-    active() {
-      return this.$store.state.todos.filter(todo => todo.done === false)
-    }  
-  },
-
-  created() {
-    this.readTodos()
   },
   mounted() {
     this.initSortable()
   },
+  created() {
+    this.readTodos()
+  },
   methods: {
     async readTodos() {
-      // action은 dispatch라는 메소드로 실행할 수 있습니다.
       this.$store.dispatch('readTodos')
+    },
+    udtateSelected(event) {
+      this.showMode=event
+    },
+    reorderTodos(event) {
+      this.$store.dispatch('reorderTodo', event)
     },
     initSortable() {
       new Sortable(this.$refs.todoList, {
-        handle: '.handle', 
-        delay: 50, 
+        handle: '.handle',
+        delay: 50,
         animation: 0, 
-        forceFallback: true, 
+        forceFallback: true,
         onEnd: event => {
+          this.reorderTodos(event)
           console.log(event)
         }
       })
-    }
-  },
+    },
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 
     .todo-count {
-      letter-spacing: .1px;
       position: relative;
-      width: 80vw;
-      margin: 0 auto 1.5rem;
-      text-align: center;
-      .string {
-        font-size: 1.8rem;
-        padding: .4rem;
-        font-weight: bold;
-      }
-      select {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      letter-spacing: .1px;
+      margin: 0 auto 2rem;
+
+      p {
         position: absolute;
-        left: 0;
+        display: block;
+        left:50%; 
+        transform: translate(-50%);
+        .string {
+          font-size: 1.8rem;
+          padding: .4rem;
+          font-weight: bold;
+        }
       }
     }
+    
     ul  {
       box-sizing: border-box;
       position: relative;
@@ -127,5 +123,11 @@ export default {
       overflow: auto;
       border-radius: 1rem;
       padding: 1.5rem;
+    }
+
+    @media screen and (max-width: 450px) {
+      p {
+        opacity: 0;
+      }
     }
 </style>

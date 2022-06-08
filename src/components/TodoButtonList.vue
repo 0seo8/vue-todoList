@@ -1,11 +1,9 @@
 <template>
-  <div class="wrap">
-    <button
-      class="clear"
-      @click="clearAllTodo">
-      Completed Clear
-    </button>
-  </div>
+  <button
+    class="clear"
+    @click="clearAllTodo">
+    Clear
+  </button>
 </template>
 
 <script>
@@ -28,23 +26,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .wrap {
-    margin-top: 2rem;
-    position: relative;
-    width: 80vw;
-    margin-left: auto;
-    margin-right: auto;
-    button {
-      position: absolute;
-      padding: .5rem;
-      cursor: pointer;
-      letter-spacing: .1rem;
-      font-size: 1.3rem;
-      color: rgb(166, 166, 166);
-      background-color: rgb(227, 233, 238);
-      border-radius: 1rem;
-      margin-right: 1rem;
-      right: 0;
-    }
+
+  button {
+    cursor: pointer;
+    font-weight: bold;
+    color: rgb(233, 65, 65);
+    border: 1px solid;
+    background-color: inherit;
   }
+
 </style>

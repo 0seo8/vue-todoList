@@ -27,17 +27,17 @@ export default {
 
 <style lang="scss" scoped>
   header {
+    font-family: 'Expletus Sans', cursive;
     display: flex;
     align-self: center;
     justify-content: space-between;
     padding: 2.2rem;
     color:#040404;    
     h1 {
-      font-family: 'Expletus Sans', cursive;
-      font-size: 2rem;
+      font-size: 2.2rem;
     }
     .date {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
     }
   }
 </style>

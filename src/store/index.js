@@ -11,7 +11,7 @@ const headers = {
 export default createStore({
   state() {
     return {
-      isLoaing:false,
+      isLoaing: false,
       todos:[],
       order: ''
     }
@@ -42,10 +42,16 @@ export default createStore({
         }
       }
     },
+    reorderTodos(state, {oldIndex, newIndex}) {
+      const clone = { ...state.todos[oldIndex] }
+      state.todos.splice(oldIndex, 1)
+      state.todos.splice(newIndex, 0, clone)
+    },
   },
   actions: {
     async readTodos({commit}) {
       try {
+        console.log('changeLoaingStatus')
         commit('changeLoaingStatus')
         const res = await axios({
           url :EDN_POINT,
@@ -60,17 +66,14 @@ export default createStore({
         commit('changeLoaingStatus', false)
       }
     },
-    async createTodo({commit}, {title, order}) {
+    async createTodo({commit}, data) {
       try {
         commit('changeLoaingStatus')
         const res = await axios({
           url :EDN_POINT,
           method: 'POST',
           headers,
-            data: {
-              title,
-              order
-            }
+            data,
         })
         console.log(res.data)
         commit('createTodo', res.data)
@@ -97,19 +100,14 @@ export default createStore({
       }
     },
     async updateTodo({commit}, data) {
-     const {id, done, title, order} = data
+     const {id} = data
       try {
         commit('changeLoaingStatus')
         const res = await axios({
           url:`${EDN_POINT}/${id}`,
           method: 'PUT',
           headers,
-          data: {
-            title,
-            id,
-            done,
-            order
-          }
+          data,
         })
           commit('updateTodo', res.data)
       } catch(err) {
@@ -117,6 +115,21 @@ export default createStore({
       } finally {
         commit('changeLoaingStatus', false)
       }
+    },
+    async reorderTodo({commit, state}, event) {
+      console.log('event', event)
+      if (event !== undefined) {
+        commit('reorderTodos', event)
+      }
+      const todoIds = state.todos.map(todo => todo.id)
+      await axios({
+        url: `${EDN_POINT}/reorder`,
+        method: 'PUT',
+        headers,
+        data: {
+          todoIds
+        }
+      })
     }
   }
 })
